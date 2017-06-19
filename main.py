@@ -43,22 +43,21 @@ def sendPacket(my_mac, gateway_ip, target_ip, target_mac):
     broadcastPacket()
 
 def scanNetwork(network):
-    # Function for performing a network scan with nmap with the help of the python-nmap module
-    returnlist = []
-    import nmap
-    nm = nmap.PortScanner()
-    a = nm.scan(hosts=network, arguments='-sP')
-
-    for k, v in a['scan'].iteritems():
-        if str(v['status']['state']) == 'up':
-            try:
-                returnlist.append([str(v['addresses']['ipv4']), str(v['addresses']['mac'])])
-            except:
-                pass
-
-    # returnlist = hostsList array
-    print returnlist
-    return returnlist
+    import re
+    import subprocess
+    nmap = subprocess.Popen(('nmap','-oX','-', '-sP', network), stdout=subprocess.PIPE)
+    ipout = nmap.communicate()[0]
+    ipout=ipout.split("<host>")
+    addrs=[]
+    for i in ipout:
+        k=[]
+        k1=re.findall('<address addr="(.*?)" addrtype="ipv4"/>\n<address addr="(.*?)" addrtype="mac"/>',i)
+        try:
+            k1=list(k1[0])
+            addrs.append(k1)
+        except:
+            pass
+    return addrs[::-1]
     
 
 try:
