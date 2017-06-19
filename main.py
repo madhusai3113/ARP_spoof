@@ -62,7 +62,6 @@ def scanNetwork(network):
 
 try:
     from scapy.all import *
-    import scan,spoof
 except:
     print("\nERROR: Requirements have not been satisfied properly.")
     raise SystemExit
