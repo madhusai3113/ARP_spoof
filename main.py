@@ -45,7 +45,7 @@ def sendPacket(my_mac, gateway_ip, target_ip, target_mac):
 def scanNetwork(network):
     import re
     import subprocess
-    nmap = subprocess.Popen(('nmap','-oX','-', '-sP', network), stdout=subprocess.PIPE)
+    nmap = subprocess.Popen(('nmap','-oX','-', '-sP', str(network)), stdout=subprocess.PIPE)
     ipout = nmap.communicate()[0]
     ipout=ipout.split("<host>")
     addrs=[]
